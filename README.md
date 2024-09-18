@@ -21,5 +21,7 @@ Para instalar chec en MSYS2 utiliza el sigiuente comando
 ```MSYS2
 pacman -S mingw-w64-x86_64-check
 
+
+Para generar el ejecutable ejecuta el siguiente comando
 ```bash
 make
