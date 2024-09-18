@@ -1,36 +1,57 @@
-#include <gtest/gtest.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+#include <check.h>
 
-// Prototipo de la función main
-int main();
+START_TEST(test_suma_matrices) {
+    FILE *fp;
+    char output[256];
+    char expected_output[] = "Resultado de la suma:\n6\t8\t\n10\t12\t\n";
 
-TEST(MatrixSumTest, CorrectOutput) {
-    // Redirigir stdin para simular la entrada
-    FILE* input = freopen("input.txt", "w", stdin);
-    fprintf(input, "2 2\n2 2\n1 2\n3 4\n5 6\n7 8\n");
-    fclose(input);
-    freopen("input.txt", "r", stdin);
+    // Ejecutar el programa principal
+    fp = popen("./main_program", "w");
+    if (fp == NULL) {
+        perror("Error al abrir el programa");
+        return;
+    }
 
-    // Redirigir stdout a un archivo temporal para capturar la salida
-    FILE* output = freopen("output.txt", "w", stdout);
+    // Proveer la entrada al programa
+    fprintf(fp, "2 2\n2 2\n1 2\n3 4\n5 6\n7 8\n");
+    pclose(fp);
 
-    // Ejecutar la función main
-    main();
-
-    // Restaurar stdout y stdin
-    freopen("/dev/tty", "w", stdout);  // En Linux/Mac (cambiar en Windows a "CON")
-    freopen("/dev/tty", "r", stdin);
-
-    // Leer el archivo de salida
-    FILE* f = fopen("output.txt", "r");
-    char result[256] = {0};
-    fread(result, sizeof(char), 255, f);
-    fclose(f);
-
-    // La salida esperada
-    const char* expectedOutput = "6\t8\t\n10\t12\t\n";
+    // Leer la salida
+    fp = popen("./main_program", "r");
+    fread(output, sizeof(char), 255, fp);
+    pclose(fp);
 
     // Comparar la salida con la salida esperada
-    EXPECT_STREQ(result, expectedOutput);
+    ck_assert_str_eq(output, expected_output);
+}
+END_TEST
+
+Suite* suma_suite(void) {
+    Suite* suite;
+    TCase* tcase;
+
+    suite = suite_create("Suma");
+    tcase = tcase_create("Pruebas");
+
+    tcase_add_test(tcase, test_suma_matrices);
+    suite_add_tcase(suite, tcase);
+
+    return suite;
+}
+
+int main(void) {
+    int number_failed;
+    Suite* suite;
+    SRunner* runner;
+
+    suite = suma_suite();
+    runner = srunner_create(suite);
+
+    srunner_run_all(runner, CK_NORMAL);
+    number_failed = srunner_ntests_failed(runner);
+    srunner_free(runner);
+    return (number_failed == 0) ? 0 : 1;
 }
