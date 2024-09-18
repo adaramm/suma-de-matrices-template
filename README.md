@@ -18,6 +18,7 @@ Para compilar el programa y las pruebas, asegúrate de tener instalado `gcc` y l
 
 Para instalar chec en MSYS2 utiliza el sigiuente comando 
 
+```MSYS2
 pacman -S mingw-w64-x86_64-check
 
 ```bash
