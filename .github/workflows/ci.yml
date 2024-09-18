@@ -1,0 +1,26 @@
+name: CI
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Instalar GCC
+      run: sudo apt-get install gcc
+
+    - name: Compilar el programa y las pruebas
+      run: |
+        gcc -o main_program main.c -lgtest -lgtest_main -pthread
+        gcc -o test_program test_main.c -lgtest -lgtest_main -pthread
+
+    - name: Ejecutar pruebas
+      run: ./test_program
