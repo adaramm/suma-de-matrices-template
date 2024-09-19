@@ -27,3 +27,25 @@ Para generar el ejecutable ejecuta el siguiente comando
 
 ```bash
 make
+```
+
+Esto generará dos ejecutables: main_program y test_program.
+
+## Ejecución
+
+Para ejecutar el programa principal:
+
+```bash
+./main_program
+```
+
+Esto te pedirá que ingreses las dimensiones de las matrices y los elementos que deseas sumar.
+
+## Para ejecutar las pruebas:
+
+```bash
+./test_program
+```
+
+Las pruebas verifican que la suma de matrices se realice correctamente.
+
