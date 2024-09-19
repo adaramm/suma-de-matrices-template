@@ -1,10 +1,23 @@
-all: main test
+# Nombre del ejecutable
+MAIN_EXEC = main_program
+TEST_EXEC = test_program
 
-main: main.c
-	gcc -o main_program main.c
+# Archivos fuente
+MAIN_SRC = main.c
+TEST_SRC = test_main.c
 
-test: test_main.c main.c
-	gcc -o test_program test_main.c -lgtest -lgtest_main -pthread
+# Flags de compilación
+CC = gcc
+CFLAGS = -Wall -Wextra
+LDFLAGS = -lcheck -pthread
+
+all: $(MAIN_EXEC) $(TEST_EXEC)
+
+$(MAIN_EXEC): $(MAIN_SRC)
+	$(CC) $(CFLAGS) -o $(MAIN_EXEC) $(MAIN_SRC)
+
+$(TEST_EXEC): $(TEST_SRC) $(MAIN_EXEC)
+	$(CC) $(CFLAGS) -o $(TEST_EXEC) $(TEST_SRC) $(LDFLAGS)
 
 clean:
-	rm -f main_program test_program
+	rm -f $(MAIN_EXEC) $(TEST_EXEC)
